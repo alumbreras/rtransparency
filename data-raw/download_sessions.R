@@ -65,19 +65,8 @@ for(nlegis in 10:12){
 }
 
 df.calls <- bind_rows(res)
-df.calls$legislatura <- 12
-df.calls$legislatura[df.calls$fecha <= as.Date("28/04/2016", format = "%d/%m/%Y")] <- 11
-df.calls$legislatura[df.calls$fecha <= as.Date("20/10/2015", format = "%d/%m/%Y")] <- 10
-
-df.calls$legislatura[df.calls$fecha <= as.Date("3/5/2019", format = "%d/%m/%Y")] <- 12
-df.calls$legislatura[df.calls$fecha <= as.Date("3/5/2016", format = "%d/%m/%Y")] <- 11
-df.calls$legislatura[df.calls$fecha <= as.Date("27/10/2015", format = "%d/%m/%Y")] <- 10
-df.calls$legislatura[df.calls$fecha <= as.Date("27/9/2011", format = "%d/%m/%Y")] <- 9
-
-
 
 df.calls$legislatura <- as.integer(df.calls$legislatura)
-#df.calls$voto <- as.factor(df.calls$voto)
 df.calls$sesion <- as.integer(df.calls$sesion)
 df.calls$votacion <- as.integer(df.calls$votacion)
 df.calls <- arrange(df.calls, fecha, sesion, votacion, grupo, diputado)
@@ -86,21 +75,17 @@ df.calls <- select(df.calls,
 
 # Sometimes, group is missing in the original data. Fix it. Also,
 # take CiU and ERC members out from the Grupo Mixto
-
 ERC <- c("Jordà i Roura, Teresa",
          "Tardà i Coma, Joan",
          "Bosch i Pascual, Alfred")
-
 CiU <- c("Nogueras i Camero, Míriam",
          "Homs Molist, Francesc",
          "Bel Accensi, Ferran",
          "Miquel i Valentí, Sergi",
          "Postius Terrado, Antoni")
-
 df.calls$grupo[df.calls$diputado == "Ramos Jordán, Alicia"] <- "GCUP-EC-EM"
 df.calls$grupo[df.calls$diputado %in% ERC] <- "GER"
 df.calls$grupo[df.calls$diputado %in% CiU] <- "GC-CiU"
-
 
 for(nleg in 10:12){
   df <- df.calls %>% filter(legislatura==nleg, is.na(grupo))
@@ -118,14 +103,3 @@ for(nleg in 10:12){
 write.csv(df.calls, file = "ESvotes_calls.csv", row.names = FALSE)
 ESvotes_calls <-  df.calls
 devtools::use_data(ESvotes_calls, overwrite = TRUE)
-###########################
-
-
-df.diputados <- df.calls %>% select(diputado, grupo) %>% arrange(grupo, diputado)
-df.calls <- df.calls %>% select(diputado, grupo) %>% arrange(grupo, diputado)
-df.calls$diputado <- factor(df.calls$diputado, levels = unique(df.diputados$diputado))
-df.calls <- df.calls %>% arrange(sesion, votacion)
-df.calls$idvotacion <- group_indices(df.calls, sesion, votacion)
-
-parlamentvotes_ES_full <- df.calls
-devtools::use_data(parlamentvotes_ES_full)
