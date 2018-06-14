@@ -1,0 +1,10 @@
+Package: rtransparency
+Title: Analysis of political data.
+Version: 0.0.0.9000
+Author: Alberto Lumbreras
+Maintainer: Alberto Lumbreras <alberto.lumbreras@gmail.com>
+Description: Datasets of votings in the Spanish Congress and scripts to analyze them.
+Depends: R (>= 3.4.2)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
