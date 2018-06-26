@@ -3,4 +3,4 @@
 .RData
 *.Rproj
 **ESvotes/
-data-raw/*.csv
+data-raw/ESvotes_calls.csv
